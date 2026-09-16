@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HGP - Hunter Gaming Productions</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+    }
+
+    /* 1. TOP NAVIGATION BAR */
+    .navbar {
+      background-color: #ffffff;
+      border-bottom: 1px solid #dcdcdc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+      color: #0077c5;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 16px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: #0077c5;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #0077c5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* 2. MAIN LAYOUT CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px;
+      display: flex;
+      gap: 24px;
+    }
+
+    .main-content {
+      flex: 3;
+    }
+
+    .sidebar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 3. TABS */
+    .tab-bar {
+      display: flex;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: bold;
+      color: #666;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tab.active {
+      color: #0077c5;
+      border-bottom: 3px solid #0077c5;
+      margin-bottom: -2px;
+    }
+
+    /* 4. COURSE GRID */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .course-card {
+      background-color: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+      overflow: hidden;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .course-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-banner {
+      height: 120px;
+      background-color: #0077c5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .card-info {
+      padding: 16px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      color: #222;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* 5. SIDEBAR WIDGETS */
+    .widget {
+      background-color: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+      padding: 16px;
+    }
+
+    .widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .widget-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .widget-link {
+      font-size: 12px;
+      color: #0077c5;
+      text-decoration: none;
+    }
+
+    .widget-body {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .reload-button {
+      background: none;
+      border: none;
+      color: #0077c5;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="#" class="logo">HGP</a>
+      <ul class="nav-links">
+        <li><a href="#">Courses ▾</a></li>
+        <li><a href="#">Groups ▾</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Grade Report</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <div class="user-profile">
+        <div class="avatar">HG</div>
+        <span>Hunter ▾</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <div class="container">
+    
+    <!-- Left Column: Courses -->
+    <main class="main-content">
+      <div class="tab-bar">
+        <button class="tab">Recent Activity</button>
+        <button class="tab active">Course Dashboard</button>
+      </div>
+
+      <div class="course-grid">
+        <div class="course-card">
+          <div class="card-banner">Game Dev 101</div>
+          <div class="card-info">
+            <div class="card-title">Game Development Fundamentals</div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="card-banner">Level Design</div>
+          <div class="card-info">
+            <div class="card-title">3D Level Design & Mechanics</div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="card-banner">Scripting</div>
+          <div class="card-info">
+            <div class="card-title">Advanced Scripting & Systems</div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="card-banner">UI / UX</div>
+          <div class="card-info">
+            <div class="card-title">Interface & Web Layout Design</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right Column: Sidebar -->
+    <aside class="sidebar">
+      <div class="widget">
+        <div class="widget-header">
+          <span class="widget-title">Upcoming Events</span>
+          <a href="#" class="widget-link">Calendar</a>
+        </div>
+        <div class="widget-body">
+          No upcoming events
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-header">
+          <span class="widget-title">Recently Completed</span>
+        </div>
+        <div class="widget-body">
+          <p>Recently Completed items are collapsed by default.</p>
+          <button class="reload-button">↻ Click here to load items</button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+</body>
+</html>
