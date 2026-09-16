@@ -30,18 +30,36 @@
     </div>
   </div>
 
-  <script>
+  <!-- FIREBASE SDK INCLUSION -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Your actual Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDicl-Ct_h3L5oFGsZCA-VyXxIlGsP_CEU",
+      authDomain: "hgp-lms.firebaseapp.com",
+      projectId: "hgp-lms",
+      storageBucket: "hgp-lms.firebasestorage.app",
+      messagingSenderId: "93525210498",
+      appId: "1:93525210498:web:314d68a1396a875b028b9b"
+    };
+
+    // Initialize Firebase & Firestore Database
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     let isSignUp = false;
 
-    function toggleMode() {
+    window.toggleMode = function() {
       isSignUp = !isSignUp;
       document.getElementById('form-title').innerText = isSignUp ? 'Create HGP Account' : 'Login to HGP';
       document.getElementById('auth-btn').innerText = isSignUp ? 'Sign Up' : 'Login';
       document.getElementById('toggle-text').innerText = isSignUp ? 'Already have an account? Login' : 'Need an account? Sign Up';
       document.getElementById('error-msg').innerText = '';
-    }
+    };
 
-    function handleAuth() {
+    window.handleAuth = async function() {
       const user = document.getElementById('username').value.trim();
       const pass = document.getElementById('password').value.trim();
       const msg = document.getElementById('error-msg');
@@ -51,30 +69,45 @@
         return;
       }
 
-      const storedUser = localStorage.getItem('hgp_user_' + user);
+      const userRef = doc(db, "users", user.toLowerCase());
 
-      if (isSignUp) {
-        if (storedUser) {
-          msg.innerText = "Username already exists!";
+      try {
+        if (isSignUp) {
+          const docSnap = await getDoc(userRef);
+          if (docSnap.exists()) {
+            msg.innerText = "Username already exists in database!";
+          } else {
+            // Save user to cloud database
+            await setDoc(userRef, {
+              username: user,
+              password: pass,
+              role: "Student",
+              createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('hgp_session', user);
+            window.location.href = 'index.html';
+          }
         } else {
-          localStorage.setItem('hgp_user_' + user, JSON.stringify({ username: user, password: pass }));
-          localStorage.setItem('hgp_session', user);
-          window.location.href = 'index.html';
+          // Check database for user credentials
+          const docSnap = await getDoc(userRef);
+          if (!docSnap.exists()) {
+            msg.innerText = "User not found in database.";
+            return;
+          }
+          
+          const userData = docSnap.data();
+          if (userData.password === pass) {
+            localStorage.setItem('hgp_session', userData.username);
+            window.location.href = 'index.html';
+          } else {
+            msg.innerText = "Incorrect password.";
+          }
         }
-      } else {
-        if (!storedUser) {
-          msg.innerText = "User not found. Please Sign Up.";
-          return;
-        }
-        const parsed = JSON.parse(storedUser);
-        if (parsed.password === pass) {
-          localStorage.setItem('hgp_session', user);
-          window.location.href = 'index.html';
-        } else {
-          msg.innerText = "Incorrect password.";
-        }
+      } catch (error) {
+        console.error("Database Error:", error);
+        msg.innerText = "Database connection error. Check console.";
       }
-    }
+    };
   </script>
 </body>
 </html>
