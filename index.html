@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HGP - Hunter Gaming Productions</title>
+  
+  <!-- AUTHENTICATION CHECK: Redirects to login page if user is not logged in -->
+  <script>
+    const currentUser = localStorage.getItem('hgp_session');
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
   <style>
     /* Reset & Base Styles */
     * {
@@ -69,7 +78,6 @@
       gap: 8px;
       font-size: 14px;
       font-weight: 500;
-      cursor: pointer;
     }
 
     .avatar {
@@ -83,6 +91,21 @@
       justify-content: center;
       font-size: 14px;
       font-weight: bold;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
     }
 
     /* 2. MAIN LAYOUT CONTAINER */
@@ -238,8 +261,9 @@
     </div>
     <div class="nav-right">
       <div class="user-profile">
-        <div class="avatar">HG</div>
-        <span>Hunter ▾</span>
+        <div class="avatar" id="user-avatar">?</div>
+        <span id="user-display-name">User</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
     </div>
   </header>
@@ -309,6 +333,20 @@
     </aside>
 
   </div>
+
+  <!-- SCRIPT: Dynamically updates User Profile & handles Logout -->
+  <script>
+    const sessionUser = localStorage.getItem('hgp_session');
+    if (sessionUser) {
+      document.getElementById('user-display-name').innerText = sessionUser;
+      document.getElementById('user-avatar').innerText = sessionUser.charAt(0).toUpperCase();
+    }
+
+    function logout() {
+      localStorage.removeItem('hgp_session');
+      window.location.href = 'login.html';
+    }
+  </script>
 
 </body>
 </html>
